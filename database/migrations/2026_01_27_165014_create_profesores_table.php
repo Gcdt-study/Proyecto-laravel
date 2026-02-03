@@ -10,13 +10,17 @@ return new class extends Migration
     {
         Schema::create('profesores', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unique(); // cada profesor tiene un usuario
+
+            // Relación con users
+            $table->unsignedBigInteger('user_id')->unique();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            // Datos del profesor
             $table->string('nombre');
             $table->string('apellido');
-            $table->boolean('es_tde')->default(false); // rol TDE
-            $table->timestamps();
+            $table->boolean('es_tde')->default(false);
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -24,5 +28,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('profesores');
     }
-
 };

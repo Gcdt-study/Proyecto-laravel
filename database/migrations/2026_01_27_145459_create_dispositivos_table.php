@@ -6,25 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('dispositivos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('tipo')->nullable(); // opcional
+            $table->string('tipo')->nullable();
+            $table->foreignId('aula_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
         Schema::dropIfExists('dispositivos');
     }
-
 };
