@@ -30,17 +30,36 @@
                                 <td class="py-2">{{ $incidencia->aula->nombre }}</td>
                                 <td class="py-2">{{ $incidencia->dispositivo->nombre }}</td>
                                 <td class="py-2">{{ $incidencia->estado }}</td>
-                                <td class="py-2 flex gap-2">
-                                    <a href="{{ route('incidencias.edit', $incidencia) }}"
-                                       class="text-blue-600">Editar</a>
 
-                                    <form action="{{ route('incidencias.destroy', $incidencia) }}"
-                                          method="POST"
-                                          onsubmit="return confirm('¿Seguro que quieres eliminarla?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="text-red-600">Eliminar</button>
-                                    </form>
+                                <td class="py-2 flex gap-3">
+
+                                    {{-- BOTÓN VER (TDE o creador) --}}
+                                    @if(auth()->user()->profesor->es_tde || auth()->id() === $incidencia->user_id)
+                                        <a href="{{ route('incidencias.show', $incidencia) }}"
+                                           class="text-green-600 hover:underline">
+                                            Ver
+                                        </a>
+                                    @endif
+
+                                    {{-- BOTÓN EDITAR (solo creador) --}}
+                                    @if(auth()->id() === $incidencia->user_id)
+                                        <a href="{{ route('incidencias.edit', $incidencia) }}"
+                                           class="text-blue-600 hover:underline">
+                                            Editar
+                                        </a>
+                                    @endif
+
+                                    {{-- BOTÓN ELIMINAR (solo creador) --}}
+                                    @if(auth()->id() === $incidencia->user_id)
+                                        <form action="{{ route('incidencias.destroy', $incidencia) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('¿Seguro que quieres eliminarla?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="text-red-600 hover:underline">Eliminar</button>
+                                        </form>
+                                    @endif
+
                                 </td>
                             </tr>
                         @endforeach

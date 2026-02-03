@@ -118,6 +118,15 @@
                     </div>
                 </div>
 
+                @auth
+                <div class="mt-6 flex justify-center">
+                    <a href="{{ route('incidencias.index') }}"
+                        class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+                        Gestionar incidencias
+                    </a>
+                </div>
+                @endauth
+
                 <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
                     <div class="text-center text-sm sm:text-left">
                         &nbsp;

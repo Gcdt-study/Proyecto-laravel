@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Aula extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+    ];
+
+    public function dispositivos()
+    {
+        return $this->hasMany(Dispositivo::class);
+    }
 }
+

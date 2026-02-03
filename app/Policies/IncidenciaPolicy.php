@@ -6,61 +6,70 @@ use App\Models\Incidencia;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
+
 class IncidenciaPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Permisos globales para el TDE.
+     * El TDE puede ver y resolver, pero NO editar ni borrar.
      */
-    public function viewAny(User $user): bool
+    public function before(User $user, $ability)
     {
-        //
+        if ($user->profesor->es_tde && in_array($ability, ['view', 'viewAny', 'resolve'])) {
+            return true;
+        }
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Ver una incidencia.
+     * Profesores normales: solo las suyas.
+     * TDE: permitido por before().
      */
-    public function view(User $user, Incidencia $incidencia): bool
+    public function view(User $user, Incidencia $incidencia)
     {
-        //
+        return $incidencia->user_id === $user->id;
     }
 
     /**
-     * Determine whether the user can create models.
+     * Ver listado de incidencias.
+     * Permitido para todos (el controlador ya filtra).
      */
-    public function create(User $user): bool
+    public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Editar una incidencia.
+     * Solo el creador puede editar.
      */
-    public function update(User $user, Incidencia $incidencia) 
-    { 
-        return $incidencia->user_id === $user->id; 
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Incidencia $incidencia) 
-    {   
-        return $incidencia->user_id === $user->id; 
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Incidencia $incidencia): bool
+    public function update(User $user, Incidencia $incidencia)
     {
-        //
+        return $incidencia->user_id === $user->id;
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Eliminar una incidencia.
+     * Solo el creador puede borrar.
      */
-    public function forceDelete(User $user, Incidencia $incidencia): bool
+public function delete(User $user, Incidencia $incidencia)
+{
+    // No se puede eliminar si está resuelta
+    if ($incidencia->estado === 'resuelta') {
+        return false;
+    }
+
+    // Solo el creador puede eliminar
+    return $user->id === $incidencia->user_id;
+}
+
+
+    /**
+     * Resolver una incidencia.
+     * Solo el TDE puede resolver (controlado por before()).
+     */
+    public function resolve(User $user, Incidencia $incidencia)
     {
-        //
+        return $user->profesor->es_tde;
     }
 }

@@ -13,5 +13,37 @@
                 </div>
             </div>
         </div>
+
+        <!-- BOTONES CENTRADOS -->
+        <div class="flex justify-center gap-4 mt-6 flex-wrap">
+
+            <!-- Incidencias (todos) -->
+            <a href="{{ route('incidencias.index') }}"
+               class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+                Gestionar incidencias
+            </a>
+
+            <!-- Aulas (todos) -->
+            <a href="{{ route('aulas.index') }}"
+               class="bg-gray-600 text-white px-6 py-3 rounded-lg shadow hover:bg-gray-700 transition">
+                Aulas
+            </a>
+
+            <!-- Dispositivos (todos) -->
+            <a href="{{ route('dispositivos.index') }}"
+               class="bg-gray-600 text-white px-6 py-3 rounded-lg shadow hover:bg-gray-700 transition">
+                Dispositivos
+            </a>
+
+            <!-- Profesores (solo TDE) -->
+            @if(auth()->user()->profesor->es_tde)
+                <a href="{{ route('profesores.index') }}"
+                   class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 transition">
+                    Gestión de profesores
+                </a>
+            @endif
+
+        </div>
+
     </div>
 </x-app-layout>

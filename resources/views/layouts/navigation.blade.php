@@ -10,12 +10,34 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
+<!-- Dashboard -->
+<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+    Dashboard
+</x-nav-link>
+
+<!-- Incidencias (todos los profesores) -->
+<x-nav-link :href="route('incidencias.index')" :active="request()->routeIs('incidencias.*')">
+    Incidencias
+</x-nav-link>
+
+<!-- Aulas (solo consulta) -->
+<x-nav-link :href="route('aulas.index')" :active="request()->routeIs('aulas.*')">
+    Aulas
+</x-nav-link>
+
+<!-- Dispositivos (solo consulta) -->
+<x-nav-link :href="route('dispositivos.index')" :active="request()->routeIs('dispositivos.*')">
+    Dispositivos
+</x-nav-link>
+
+<!-- Profesores (solo TDE) -->
+@if(auth()->user()->profesor->es_tde)
+    <x-nav-link :href="route('profesores.index')" :active="request()->routeIs('profesores.*')">
+        Profesores
+    </x-nav-link>
+@endif
+
+
             </div>
 
             <!-- Settings Dropdown -->
